@@ -48,8 +48,47 @@ Cloud Native Architecture로 설계된 Application
 4. Container 가상화
 ---
 # Spring Cloud Netflix Eureka
-모든 마이크로 서비스는 Spring Cloud Netflix Eureka에 등록한다.
-유레카가 해주는 역할 == Service Discovery: 외부에서 마이크로서비스를 검색하는데 사용한다.
+- 모든 마이크로 서비스는 Spring Cloud Netflix Eureka에 등록한다.
+- 유레카가 해주는 역할 == Service Discovery: 외부에서 마이크로서비스를 검색하는데 사용한다.
 1. 유레카에 마이크로서비스를 등록한다.
 2. 클라이언트는 필요한 요청정보를 Load Balancer(API Gateway)에 요청하고
 3. 이 정보가 서비스 디스커버리에 전달되어 필요한 마이크로서비스에 전달해준다.
+
+# API Gateway Service
+- 사용자가 설정한 라우팅 설정에 따라 엔드포인트로 클라인트 대신에 전달하는 proxy 역할
+- 시스템 내부 구조를 숨기고 외부의 요청에 대해 적절한 가공을 통해 전달한다.
+
+기능)
+- 인증 및 권한 부여
+- 서비스 검색 통합
+- 응답 캐싱
+- 정책, 회로 차단기 및 QoS 다시 시도
+- 속도 제한
+- 부하 분산
+- 로깅, 추적, 상관관계
+- 헤더, 쿼리 문자열 및 청구 변환
+- IP 허용 목록에 추가
+
+# Netflix Ribbon
+- Spring Cloud에서의 MSA간 통신
+- 방법1) RestTemplate
+- 방법2) Feign Client
+- 문제) 로드 밸런서를 어디서 구축해서 구현할지 고민
+
+
+- Ribbon: Client side Load Balancer 역할
+- 서비스 이름으로 호출
+- Health Check
+- 문제) Client side 측에 Ribbon을 장착해 사용했는데, 비동기가 안되서 잘 사용하지 않는다. (API Gateway 존재 x)
+- 하지만 장점으로 외부의 서비스를 호출할 때, MSA 이름만을 가지고 호출이 가능하다.
+
+
+- 최근에 Spring Cloud Ribbon은 Spring Boot 2.4에서 Maintenance 상태 (더이상 새로운 기능을 추가하지 않는다는 의미)
+
+# Netflix Zuul
+구성)
+- First Service
+- Second Service
+- Netflix Zuul: Routing, API Gateway 역할
+- Spring Cloud Zuul도 Spring Boot 2.4에서 Maintenance 상태
+
