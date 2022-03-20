@@ -1,11 +1,15 @@
 server:
-  port: 8081
-
+#  port: 8081 # service를 여러 개 띄우면 어떤 service가 쓰이는지 알 방법이 없어 -> random port 이용
+  port: 0
 spring:
   application:
     name: my-first-service
 
 eureka:
   client:
-    fetch-registry: false
-    register-with-eureka: false
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    instance: # 0번 포트사용하면 유레카 데쉬보드에는 하나밖에 안 보이는 현상 발생
+      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}} # 각 인스턴스에게 id 부여하면 대쉬보드에 다 보인다.
