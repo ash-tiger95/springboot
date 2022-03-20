@@ -22,6 +22,7 @@ public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Conf
 
     @Override
     public GatewayFilter apply(Config config) { // Custom Filter 작성
+        // Custom Pre Filter
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest(); // (비동기) <-> ServletRequset(동기)
             ServerHttpResponse response = exchange.getResponse();
