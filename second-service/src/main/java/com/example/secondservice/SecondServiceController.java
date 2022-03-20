@@ -11,13 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class SecondServiceController {
     @GetMapping("/welcome")
-    public String welcome(){
+    public String welcome() {
         return "Welcome to the Second Service";
     }
 
     @GetMapping("/message")
-    public String message(@RequestHeader("second-request") String header){
+    public String message(@RequestHeader("second-request") String header) {
         log.info(header);
         return "GET: message(): Hello World in Second Service";
+    }
+
+    // [API Gateway Service] - Custom Filter 적용
+    @GetMapping("/check")
+    public String check() {
+        return "Hi, Custom Filter from Second Service";
     }
 }

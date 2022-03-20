@@ -14,13 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class FirstServiceController {
 
     @GetMapping("/welcome")
-    public String welcome(){
+    public String welcome() {
         return "Welcome to the First Service";
     }
 
+    // [API Gateway Service] - Filter 적용
     @GetMapping("/message")
-    public String message(@RequestHeader("first-request") String header){
+    public String message(@RequestHeader("first-request") String header) {
         log.info(header); // 2-2. log 사용
         return "GET: message(): Hello World in First Service";
+    }
+
+    // [API Gateway Service] - Custom Filter 적용
+    @GetMapping("/check")
+    public String check() {
+        return "Hi, Custom Filter from First Service";
     }
 }
