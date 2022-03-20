@@ -92,3 +92,9 @@ Cloud Native Architecture로 설계된 Application
 - Netflix Zuul: Routing, API Gateway 역할
 - Spring Cloud Zuul도 Spring Boot 2.4에서 Maintenance 상태
 
+---
+# Spring Cloud Gateway
+- predicates로 요청을 하면 uri로 가겠다는 의미
+- 쓰는 목적: 비동기가 가능, Zuul은 동기 방식, Spring Cloud Gateway가 Zuul을 대채한다.
+1. application.yml에서 predicates, uri 설정
+2. @RequestMapping 설정
