@@ -98,3 +98,7 @@ Cloud Native Architecture로 설계된 Application
 - 쓰는 목적: 비동기가 가능, Zuul은 동기 방식, Spring Cloud Gateway가 Zuul을 대채한다.
 1. application.yml에서 predicates, uri 설정
 2. @RequestMapping 설정
+---
+# jar vs war
+jar: springboot안에 포함된 내장 tomcat서버가 작동하면서 스프링부트를 기동
+war: application 구조가 web형태로 바뀌어 내장 서버가 없고 외장 서버에 마이크로서비스를 배포해야 한다.
