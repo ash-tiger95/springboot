@@ -43,10 +43,34 @@ spring:
                 baseMessage: Hi, there.
                 preLogger: true
                 postLogger: true
+#        - id: user-service
+#          uri: lb://USER-SERVICE # Eureka 서버에 등록된 Application 이름
+#          predicates:
+#            - Path=/user-service/**
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login # 로그인
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment} # /user-service/(?<segment>.*)로 들어오면 /$\{segment}로 바꾸겠다.
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users # 회원가입
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service
           uri: lb://USER-SERVICE # Eureka 서버에 등록된 Application 이름
           predicates:
-            - Path=/user-service/**
+            - Path=/user-service/login # 나머지
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
