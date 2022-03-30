@@ -1,7 +1,6 @@
 package com.example.userservice.security;
 
 import com.example.userservice.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,7 +17,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private Environment environment;
 
-    @Autowired
+    // @Configuration에서는 @Autowired를 하지 않아도 Autowired 이전에 필요한 상태가 준비된다.
     public WebSecurity(Environment environment, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.environment = environment; // 토근 관련 정보를 불러올 수 있다.
         this.userService = userService;
@@ -50,4 +49,5 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService) // select pwd from user
                 .passwordEncoder(bCryptPasswordEncoder); // 사용자가 입력한 email, pwd로 로그인 처리
     }
+
 }
