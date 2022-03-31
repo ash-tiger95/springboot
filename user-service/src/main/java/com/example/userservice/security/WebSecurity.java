@@ -38,8 +38,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception{
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(); // 인증처리를 위한 메니저는 시큐리티에서 가져온 authenticationManager
-        authenticationFilter.setAuthenticationManager(authenticationManager());
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), userService, environment); // 인증처리를 위한 메니저는 시큐리티에서 가져온 authenticationManager
+//        authenticationFilter.setAuthenticationManager(authenticationManager()); // 생성자를 통해 호출하니깐 호출할 필요가 없다.
 
         return authenticationFilter;
     }
@@ -47,7 +47,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception { // 인증관련 configure
         auth.userDetailsService(userService) // select pwd from user
-                .passwordEncoder(bCryptPasswordEncoder); // 사용자가 입력한 email, pwd로 로그인 처리
+                .passwordEncoder(bCryptPasswordEncoder); // 사용자가 입력한 email, pwd(패스워드를 암호화한다)로 로그인 처리
     }
 
 }

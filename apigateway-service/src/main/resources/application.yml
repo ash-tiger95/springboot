@@ -79,3 +79,7 @@ spring:
           uri: lb://ORDER-SERVICE
           predicates:
             - Path=/order-service/**
+        - id: dailycheck-service
+          uri: lb://DAILYCHECK-SERVICE
+          predicates:
+            - Path=/dailycheck-service/**

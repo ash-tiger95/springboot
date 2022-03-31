@@ -4,6 +4,8 @@ import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter { // Bean으로 등록된 상태가 아니라 WebSecurity에서 인스턴스를 생성해서 사용하고 있다.
@@ -62,6 +65,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String userName = ((User)authResult.getPrincipal()).getUsername();
 
         // UserId를 가지고 토큰을 만들기 때문에 DB에서 불러와야한다.
-        UserDto userDto = userService.getUserDetailsByEmail(userName);
+        UserDto userDetails = userService.getUserDetailsByEmail(userName);
+
+        String token = Jwts.builder()
+                .setSubject(userDetails.getUserId())
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(env.getProperty("token.expiration_time")))) // 만기일 하루
+                .signWith(SignatureAlgorithm.HS256, env.getProperty("token.secret")) // 암호알고리즘
+                .compact(); // 토큰 생성
+        response.addHeader("token", token);
+        response.addHeader("userId",userDetails.getUserId());
+
     }
 }
