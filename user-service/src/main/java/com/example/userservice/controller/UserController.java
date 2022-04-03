@@ -36,18 +36,23 @@ public class UserController {
     }
 
     @GetMapping("/health_check")
-    public String status(){
-        return String.format("It's Working in User Service on Port %s", env.getProperty("local.server.port")); // 랜덤포트로 할당된 포트를 불러올 수 있다.
+    public String status() {
+//        return String.format("It's Working in User Service on Port %s", env.getProperty("local.server.port")); // 랜덤포트로 할당된 포트를 불러올 수 있다.
+        return String.format("It's Working in User Service"
+                + ", port(local.server.port) = " + env.getProperty("local.server.port")
+                + ", port(server.port) = " + env.getProperty("server.port")
+                + ", token secret = " + env.getProperty("token.secret")
+                + ", tokent expiration time = " + env.getProperty("token.expiration_time"));
     }
 
     @GetMapping("/welcome")
-    public String welcome(){
+    public String welcome() {
 //        return env.getProperty("greeting.message"); // 방법1)
         return greeting.getMessage(); // 방법2)
     }
 
     @PostMapping("/users")
-    public ResponseEntity<ResponseUser> createUser(@RequestBody RequestUser requestUser){
+    public ResponseEntity<ResponseUser> createUser(@RequestBody RequestUser requestUser) {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -60,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<ResponseUser>> getUsers(){
+    public ResponseEntity<List<ResponseUser>> getUsers() {
         Iterable<UserEntity> userList = userService.getUserByAll();
 
         List<ResponseUser> result = new ArrayList<>();
@@ -72,7 +77,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<ResponseUser> getUser(@PathVariable String userId){
+    public ResponseEntity<ResponseUser> getUser(@PathVariable String userId) {
         UserDto userDto = userService.getUserByUserId(userId);
 
         ResponseUser returnValue = new ModelMapper().map(userDto, ResponseUser.class);
