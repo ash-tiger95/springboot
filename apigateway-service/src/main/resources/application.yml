@@ -2,6 +2,10 @@ server:
   port: 8000
 
 eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    hostname: localhost
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -47,31 +51,39 @@ spring:
 #          uri: lb://USER-SERVICE # Eureka 서버에 등록된 Application 이름
 #          predicates:
 #            - Path=/user-service/**
-        - id: user-service
+        - id: user-service # 로그인
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/login # 로그인
+            - Path=/user-service/login
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment} # /user-service/(?<segment>.*)로 들어오면 /$\{segment}로 바꾸겠다.
-        - id: user-service
+        - id: user-service # 회원가입
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/users # 회원가입
+            - Path=/user-service/users
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-        - id: user-service
+        - id: user-service # 나머지
           uri: lb://USER-SERVICE # Eureka 서버에 등록된 Application 이름
           predicates:
-            - Path=/user-service/** # 나머지
+            - Path=/user-service/**
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter # 나머지 요청은 필터처리 필수
+        - id: user-service # Actuator
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
@@ -80,5 +92,13 @@ spring:
           uri: lb://ORDER-SERVICE
           predicates:
             - Path=/order-service/**
+
+
 token:
   secret: user_token
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace

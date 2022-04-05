@@ -1,11 +1,17 @@
 server:
   port: 8888
 
+
 spring:
   application:
     name: config-service
+  profiles:
+    active: native # 파일시스템에 저장
   cloud:
     config:
       server:
+        native:
+          search-locations: file:///${user.home}/Documents/config # 파일 시스템 저장
         git:
-          uri: file:///${user.home}/Documents/config
+#          uri: file:///${user.home}/Documents/config
+          uri: https://github.com/ash-tiger95/spring-cloud-config # GIT에 저장
