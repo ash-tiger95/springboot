@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: user-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   h2:
     console:
       enable: true
@@ -54,6 +59,6 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans
+        include: refresh, health, beans, busrefresh
 # refresh: 현재 마이크로서비스에 있는 Config Server에서의 정보를 refresh
 # beans: 현재 마이크로서비스에 등록된 빈의 정보 확인
