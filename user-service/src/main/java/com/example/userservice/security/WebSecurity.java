@@ -34,7 +34,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         // 요청정보에 대해 getAuthenticationFilter()를 적용해야 한다.
         http.authorizeRequests().antMatchers("/**")
-                .hasIpAddress("172.23.0.1") // IP 제한
+                .hasIpAddress("192.168.35.30") // IP 제한
                 .and()
                 .addFilter(getAuthenticationFilter()); // 인증이 된(필터를 통과한) 상태에서만 요청 허락
     

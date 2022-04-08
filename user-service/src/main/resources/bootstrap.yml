@@ -1,7 +1,9 @@
+# application.yml: 어플리케이션 정보, bootstrap.yml: application.yml보다 우선순위가 높은 설정 파일
 spring:
   cloud:
     config:
-      uri: http://127.0.0.1:8888
-      name: config-service
+      uri: http://127.0.0.1:8888 # Config-Service 위치
+#      name: config-service # 파일명 안 적으면 config-service의 application.yml (default)
+      name: user-service # 파일명
 #  profiles:
 #    active: dev

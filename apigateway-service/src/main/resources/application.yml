@@ -72,6 +72,14 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service # Actuator
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service # 나머지
           uri: lb://USER-SERVICE # Eureka 서버에 등록된 Application 이름
           predicates:
@@ -81,14 +89,7 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter # 나머지 요청은 필터처리 필수
-        - id: user-service # Actuator
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/user-service/actuator
-            - Method=GET,POST
-          filters:
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
